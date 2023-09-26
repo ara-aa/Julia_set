@@ -1,0 +1,15 @@
+{
+  "name": "julia_set",
+  "version": "1.0.0",
+  "description": "julia_set",
+  "author": "ara-aa",
+  "license": "UNLICENSED",
+  "scripts": {
+    "lint": "eslint frontend/src/**/* backend/server.ts",
+    "test": "npm-run-all --parallel tsc:check lint lint:format"
+  },
+  "devDependencies": {
+    "@nkzw/eslint-config": "^1.6.1",
+    "prettier": "^3.0.3"
+  }
+}
