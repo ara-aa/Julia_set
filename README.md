@@ -1,15 +1,17 @@
-# ジュリア集合
+# Julia_set
+
+[localhost](http://localhost:8080/satori/julia)
 
 ## frontend
 
-[http://localhost:3000](http://localhost:3000)
-
 ```
+$ cd frontend
 $ npm start
 ```
 
 ## backend
 
 ```
+$ cd backend
 $ npm start
 ```
