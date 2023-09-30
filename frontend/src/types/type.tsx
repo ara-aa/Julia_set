@@ -17,7 +17,6 @@ export type ErrorMessageType = {
 export type ParamType = {
   values: InputParamType;
   messages: ErrorMessageType;
-  loading: boolean;
 };
 
 // const labels: LABEL = {

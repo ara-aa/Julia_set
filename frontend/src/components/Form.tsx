@@ -1,75 +1,56 @@
 import React, { useState } from "react";
-import { ParamType } from "../types/type";
+import { InputParamType, ErrorMessageType } from "../types/type";
 import { inputValidation } from "../utils/Validation";
 
 const Form: React.FC = () => {
-  const [params, setParams] = useState<ParamType>({
-    values: {
-      min_x: "",
-      max_x: "",
-      min_y: "",
-      max_y: "",
-      comp_const: "",
-    },
-    messages: {
-      min_x: "",
-      max_x: "",
-      min_y: "",
-      max_y: "",
-      comp_const: "",
-    },
-    loading: false,
+  const [loading, setLoading] = useState<boolean>(false);
+  const [params, setParams] = useState<InputParamType>({
+    min_x: "",
+    max_x: "",
+    min_y: "",
+    max_y: "",
+    comp_const: "",
+  });
+  const [messages, setMessages] = useState<ErrorMessageType>({
+    min_x: "",
+    max_x: "",
+    min_y: "",
+    max_y: "",
+    comp_const: "",
   });
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const key = event.target.name;
     const value = event.target.value;
-    const { values, messages } = params;
 
-    setParams({
-      values: { ...values, [key]: value },
-      messages: { ...messages, [key]: inputValidation(value) },
-      loading: false,
-    });
+    setParams({ ...params, [key]: value });
+    setMessages({ ...messages, [key]: inputValidation(value) });
   };
 
   const checkSubmit = (): void => {
-    for (const [key, value] of Object.entries(params.values)) {
-      console.log(key);
+    for (const [key, value] of Object.entries(params)) {
       if (value === "") {
-        setParams({
-          values: { ...params.values },
-          messages: { ...params.messages, ...{ [key]: "必須入力です。" } },
-          loading: false,
+        setMessages((prevMessages) => {
+          return { ...prevMessages, [key]: "必須入力です。" };
         });
       }
     }
-
-    // const validMessage =
-    //   Object.values(messages).filter((message) => {
-    //     return message !== "";
-    //   }).length === 0;
-    // console.log(validMessage);
-
-    // return validMessage && loading;
   };
 
   const onSubmit = () => {
     checkSubmit();
 
     const canSubmit =
-      Object.values(params.messages).filter((message) => {
+      Object.values(messages).filter((message) => {
         return message !== "";
       }).length === 0;
 
     if (!canSubmit) {
-      console.log("!");
-
       return;
     }
-  };
 
-  const { values, messages } = params;
+    setLoading(true);
+  };
 
   return (
     <form>
@@ -79,7 +60,8 @@ const Form: React.FC = () => {
           <input
             className={`form-text ${messages.min_x.length ? "--error" : ""}`}
             name="min_x"
-            value={values.min_x}
+            value={params.min_x}
+            onBlur={(e) => handleChange(e)}
             onChange={(e) => handleChange(e)}
           />
           {messages.min_x && <p className="error-text">{messages.min_x}</p>}
@@ -89,7 +71,8 @@ const Form: React.FC = () => {
           <input
             className={`form-text ${messages.max_x.length ? "--error" : ""}`}
             name="max_x"
-            value={values.max_x}
+            value={params.max_x}
+            onBlur={(e) => handleChange(e)}
             onChange={(e) => handleChange(e)}
           />
           {messages.max_x && <p className="error-text">{messages.max_x}</p>}
@@ -99,7 +82,8 @@ const Form: React.FC = () => {
           <input
             className={`form-text ${messages.min_y.length ? "--error" : ""}`}
             name="min_y"
-            value={values.min_y}
+            value={params.min_y}
+            onBlur={(e) => handleChange(e)}
             onChange={(e) => handleChange(e)}
           />
           {messages.min_y && <p className="error-text">{messages.min_y}</p>}
@@ -109,7 +93,8 @@ const Form: React.FC = () => {
           <input
             className={`form-text ${messages.max_y.length ? "--error" : ""}`}
             name="max_y"
-            value={values.max_y}
+            value={params.max_y}
+            onBlur={(e) => handleChange(e)}
             onChange={(e) => handleChange(e)}
           />
           {messages.max_y && <p className="error-text">{messages.max_y}</p>}
@@ -121,7 +106,8 @@ const Form: React.FC = () => {
               messages.comp_const.length ? "--error" : ""
             }`}
             name="comp_const"
-            value={values.comp_const}
+            value={params.comp_const}
+            onBlur={(e) => handleChange(e)}
             onChange={(e) => handleChange(e)}
           />
           {messages.comp_const && (
@@ -130,8 +116,9 @@ const Form: React.FC = () => {
         </li>
         <input
           type="submit"
-          className="form-submit-button"
+          className={`form-submit-button ${loading ? "--error" : ""}`}
           value="描画"
+          disabled={loading}
           onClick={onSubmit}
         />
       </ul>

@@ -90,6 +90,9 @@ form {
   -moz-appearance: none;
   cursor: pointer;
   border: 2px solid transparent;
+  &.--error {
+    background-color: #000;
+  }
 }
 
 .form-submit-button:hover {
