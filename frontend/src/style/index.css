@@ -43,11 +43,12 @@ form {
   grid-column: 1 / -1;
 }
 
-.text {
+.error-text {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-top: 10px;
+  color: red;
 }
 
 .text p {
@@ -64,6 +65,9 @@ form {
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
+  &.--error {
+    background-color: pink;
+  }
 }
 
 .form-text:focus {
