@@ -2,7 +2,7 @@ import * as React from "react";
 
 const Julia: React.FC = () => {
   return (
-    <div className="container fruitsList">
+    <div>
       <h1>Fruits Store</h1>
     </div>
   );
