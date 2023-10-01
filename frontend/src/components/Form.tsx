@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { InputParamType, ErrorMessageType } from "../types/type";
+import { InputParamType, ErrorMessageType } from "../../../types/type";
 import { inputValidation } from "../utils/Validation";
 
 const Form: React.FC = () => {
@@ -40,9 +40,7 @@ const Form: React.FC = () => {
     return canSubmit;
   };
 
-  const onSubmit = () => {
-    console.log("!!");
-
+  const onSubmit = async () => {
     const canSubmit = checkRequired();
 
     console.log(messages);
@@ -52,35 +50,36 @@ const Form: React.FC = () => {
       return;
     }
 
-    console.log("!!!!!!!!!!!!!!!!!!!!!!");
     setLoading(true);
-    // s();
-    // setLoading(false);
+    await s();
+    setLoading(false);
   };
 
-  // const s = async () => {
-  //   await fetch("http://localhost:8888/julia", {
-  //     method: "POST",
-  //     mode: "cors",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.parse(JSON.stringify("poyo!")),
-  //   })
-  //     .then((response) => {
-  //       if (!response.ok) {
-  //         setLoading(false);
-  //         console.error("サーバーエラー", response.status);
-  //       }
-  //       setLoading(false);
-  //       response.json();
-  //     })
-  //     .then((data) => console.log(data))
-  //     .catch((error) => {
-  //       setLoading(false);
-  //       console.error("通信に失敗しました", error);
-  //     });
-  // };
+  const s = async () => {
+    console.log("??");
+    await fetch("/julia", {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(params),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          setLoading(false);
+          console.error("サーバーエラー", response.status);
+        }
+        console.log("???");
+        setLoading(false);
+        response.json();
+      })
+      .then((data) => console.log(data))
+      .catch((error) => {
+        setLoading(false);
+        console.error("通信に失敗しました", error);
+      });
+  };
 
   return (
     <form>
