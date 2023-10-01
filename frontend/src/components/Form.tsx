@@ -27,30 +27,60 @@ const Form: React.FC = () => {
     setMessages({ ...messages, [key]: inputValidation(value) });
   };
 
-  const checkSubmit = (): void => {
+  const checkRequired = (): boolean => {
+    let canSubmit = true;
     for (const [key, value] of Object.entries(params)) {
       if (value === "") {
+        canSubmit = false;
         setMessages((prevMessages) => {
           return { ...prevMessages, [key]: "必須入力です。" };
         });
       }
     }
+    return canSubmit;
   };
 
   const onSubmit = () => {
-    checkSubmit();
+    console.log("!!");
 
-    const canSubmit =
-      Object.values(messages).filter((message) => {
-        return message !== "";
-      }).length === 0;
+    const canSubmit = checkRequired();
 
+    console.log(messages);
+    console.log(canSubmit);
     if (!canSubmit) {
+      console.log("--- return ---");
       return;
     }
 
+    console.log("!!!!!!!!!!!!!!!!!!!!!!");
     setLoading(true);
+    // s();
+    // setLoading(false);
   };
+
+  // const s = async () => {
+  //   await fetch("http://localhost:8888/julia", {
+  //     method: "POST",
+  //     mode: "cors",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.parse(JSON.stringify("poyo!")),
+  //   })
+  //     .then((response) => {
+  //       if (!response.ok) {
+  //         setLoading(false);
+  //         console.error("サーバーエラー", response.status);
+  //       }
+  //       setLoading(false);
+  //       response.json();
+  //     })
+  //     .then((data) => console.log(data))
+  //     .catch((error) => {
+  //       setLoading(false);
+  //       console.error("通信に失敗しました", error);
+  //     });
+  // };
 
   return (
     <form>
@@ -63,6 +93,7 @@ const Form: React.FC = () => {
             value={params.min_x}
             onBlur={(e) => handleChange(e)}
             onChange={(e) => handleChange(e)}
+            required
           />
           {messages.min_x && <p className="error-text">{messages.min_x}</p>}
         </li>
@@ -74,6 +105,7 @@ const Form: React.FC = () => {
             value={params.max_x}
             onBlur={(e) => handleChange(e)}
             onChange={(e) => handleChange(e)}
+            required
           />
           {messages.max_x && <p className="error-text">{messages.max_x}</p>}
         </li>
@@ -85,6 +117,7 @@ const Form: React.FC = () => {
             value={params.min_y}
             onBlur={(e) => handleChange(e)}
             onChange={(e) => handleChange(e)}
+            required
           />
           {messages.min_y && <p className="error-text">{messages.min_y}</p>}
         </li>
@@ -96,6 +129,7 @@ const Form: React.FC = () => {
             value={params.max_y}
             onBlur={(e) => handleChange(e)}
             onChange={(e) => handleChange(e)}
+            required
           />
           {messages.max_y && <p className="error-text">{messages.max_y}</p>}
         </li>
@@ -109,6 +143,7 @@ const Form: React.FC = () => {
             value={params.comp_const}
             onBlur={(e) => handleChange(e)}
             onChange={(e) => handleChange(e)}
+            required
           />
           {messages.comp_const && (
             <p className="error-text">{messages.comp_const}</p>
@@ -116,7 +151,7 @@ const Form: React.FC = () => {
         </li>
         <input
           type="submit"
-          className={`form-submit-button ${loading ? "--error" : ""}`}
+          className="form-submit-button"
           value="描画"
           disabled={loading}
           onClick={onSubmit}

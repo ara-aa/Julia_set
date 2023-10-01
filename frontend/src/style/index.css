@@ -66,7 +66,9 @@ form {
   -webkit-appearance: none;
   -moz-appearance: none;
   &.--error {
-    background-color: pink;
+    color: #630015;
+    border-color: #c20c33;
+    background-color: #ffd9e1;
   }
 }
 
@@ -90,9 +92,15 @@ form {
   -moz-appearance: none;
   cursor: pointer;
   border: 2px solid transparent;
-  &.--error {
-    background-color: #000;
-  }
+  /* &.--error {
+    filter: brightness(0.8);
+    cursor: not-allowed;
+  } */
+}
+
+.form-submit-button:disabled {
+  filter: brightness(0.8);
+  cursor: not-allowed;
 }
 
 .form-submit-button:hover {
