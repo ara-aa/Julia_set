@@ -1,15 +1,10 @@
 import express from "express";
-import type { InputParamType, ErrorMessageType } from "../types/type";
+import * as math from "mathjs";
 
 const app: express.Express = express();
 const port = 8888;
 
 app.listen(port);
-
-// app.get("/", (req: express.Request, res: express.Response) => {
-//   res.send("Hello, world!");
-// });
-
 app.use(express.json());
 
 app.use((req, res, next) => {
@@ -19,39 +14,60 @@ app.use((req, res, next) => {
   next();
 });
 
-app.post("/julia", (req, res, next) => {
+app.post("/julia", (req, res) => {
   try {
-    const json: keyof InputParamType = req.body;
+    const data = req.body;
+    console.log(data);
 
-    const errors: ErrorMessageType = {
-      min_x: "",
-      max_x: "",
-      min_y: "",
-      max_y: "",
-      comp_const: "",
-    };
-    for (const [key, value] of Object.entries(json)) {
-      const msg = inputValidation(value);
-      if (msg.length !== 0) {
-        // errors[key] = msg;
-      }
+    const result = calCount(
+      Number(data["min_x"]),
+      Number(data["max_x"]),
+      Number(data["min_y"]),
+      Number(data["max_y"]),
+      data["comp_const"],
+    );
+
+    if (typeof result === "string") {
+      res.status(412).json({ error: result });
     }
 
-    console.log(res);
+    console.log(data);
   } catch (error) {
     console.error(error);
   }
 });
 
-const inputValidation = (val: string) => {
-  if (!val) {
-    return "必須入力です。";
-  }
+const h = 255;
+const w = 255;
 
-  const r = /^[+,-]?([1-9]\d*|0)(\.\d+)?$/;
-  if (r.test(val)) {
-    return "";
-  } else {
-    return "数値を入力してください。";
+// 発散するか確認
+function calCount(
+  min_x: number,
+  max_x: number,
+  min_y: number,
+  max_y: number,
+  comp_const: string,
+) {
+  const C = math.complex(comp_const);
+
+  calcLoop: for (let i = 0; i < w; i++) {
+    for (let j = 0; j < h; j++) {
+      const Z = math.complex(
+        min_x + ((max_x - min_x) * i) / w,
+        min_y + ((max_y - min_y) * j) / h,
+      );
+      console.log("Z: ", Z);
+
+      for (let k = 0; k < 100; k++) {
+        const z = math.add(math.square(Z), C); // zを2乗してCを足す
+        console.log("z: ", z);
+        // 発散するかを確認
+        if (math.larger(math.abs(z), 2)) {
+          break calcLoop;
+        }
+        return {};
+      }
+    }
   }
-};
+  return "描画できない入力でした。";
+}
