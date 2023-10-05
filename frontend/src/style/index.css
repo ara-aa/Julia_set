@@ -51,8 +51,8 @@ form {
   color: red;
 }
 
-.text p {
-  font-size: 36px;
+.text {
+  font-size: 16px;
 }
 
 .form-text {
@@ -113,8 +113,20 @@ form {
   border: 2px solid rgb(33, 150, 243);
 }
 
-@media (min-width: 768px) {
-  .appList {
-    grid-template-columns: 1fr 1fr;
-  }
+.julia {
+  width: 255;
+  height: 255;
+}
+
+.toast {
+  z-index: 999;
+  background-color: rgba(178, 34, 34, 0.8);
+  color: white;
+  padding: 12px;
+  box-shadow: 0 0 10px rgba(178, 34, 34, 0.5);
+  text-align: center;
+  position: fixed;
+  top: 5;
+  left: 0;
+  width: 100%;
 }

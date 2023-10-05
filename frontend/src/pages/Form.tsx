@@ -1,6 +1,8 @@
-import React, { useState } from "react";
-import { InputParamType, ErrorMessageType } from "../../../types/type";
-import { inputValidation } from "../utils/Validation";
+import React, { useState, useContext } from "react";
+import * as math from "mathjs";
+import { InputParamType, ErrorMessageType } from "../../types/type";
+import { inputValidation, complexValidation } from "../utils/Validation";
+import { ToastContext } from "../components/ToastProvider";
 
 const Form: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -18,6 +20,7 @@ const Form: React.FC = () => {
     max_y: "",
     comp_const: "",
   });
+  const showToast = useContext(ToastContext);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const key = event.target.name;
@@ -25,6 +28,14 @@ const Form: React.FC = () => {
 
     setParams({ ...params, [key]: value });
     setMessages({ ...messages, [key]: inputValidation(value) });
+  };
+
+  const handleCompChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const key = event.target.name;
+    const value = event.target.value;
+
+    setParams({ ...params, [key]: value });
+    setMessages({ ...messages, [key]: complexValidation(value) });
   };
 
   const checkRequired = (): boolean => {
@@ -46,10 +57,10 @@ const Form: React.FC = () => {
     console.log(messages);
     console.log(canSubmit);
     if (!canSubmit) {
-      console.log("--- return ---");
       return;
     }
 
+    // setParams({ ...params, comp_const: math.complex(params.comp_const) });
     setLoading(true);
     await s();
     setLoading(false);
@@ -68,17 +79,27 @@ const Form: React.FC = () => {
       .then((response) => {
         if (!response.ok) {
           setLoading(false);
-          console.error("サーバーエラー", response.status);
+          if (response.status === 412) {
+            openToast("描画できない入力でした。");
+          } else {
+            openToast("サーバーエラーです。");
+          }
         }
-        console.log("???");
+        // openToast("poyo.....");
+        console.log(response.status);
         setLoading(false);
         response.json();
       })
       .then((data) => console.log(data))
       .catch((error) => {
         setLoading(false);
-        console.error("通信に失敗しました", error);
+        openToast(error);
       });
+  };
+
+  const openToast = (msg: string) => {
+    console.log(msg);
+    showToast && showToast(msg);
   };
 
   return (
@@ -139,9 +160,9 @@ const Form: React.FC = () => {
               messages.comp_const.length ? "--error" : ""
             }`}
             name="comp_const"
-            value={params.comp_const}
-            onBlur={(e) => handleChange(e)}
-            onChange={(e) => handleChange(e)}
+            value={params.comp_const as string}
+            onBlur={(e) => handleCompChange(e)}
+            onChange={(e) => handleCompChange(e)}
             required
           />
           {messages.comp_const && (
