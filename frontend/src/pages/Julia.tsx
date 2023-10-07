@@ -1,37 +1,62 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext, PropsWithChildren } from "react";
+import { width, height, threshold } from "../../../common/const";
+import { ToastContext } from "../components/ToastProvider";
+import * as math from "mathjs";
+// import { AssociativeArray } from "../../types/type";
 
-const Julia: React.FC = () => {
-  // contextを状態として持つ
-  // const [context, setContext] = useState(null);
-  // // 画像読み込み完了トリガー
-  // const [loaded, setLoaded] = useState(false);
-  // // コンポーネントの初期化完了後コンポーネント状態にコンテキストを登録
-  // useEffect(() => {
-  //   const canvas = document.getElementById("canvas");
-  //   if (canvas === null) {
-  //   }
-  //   const canvasContext = canvas.getContext("2d");
-  //   setContext(canvasContext);
-  // }, []);
-  // // 状態にコンテキストが登録されたらそれに対して操作できる
-  // useEffect(() => {
-  //   if (context !== null) {
-  //     const img = new Image();
-  //     img.src = "img.jpg"; // 描画する画像など
-  //     img.onload = () => {
-  //       context.drawImage(img, 0, 0);
-  //       // 更にこれに続いて何か処理をしたい場合
-  //       setLoaded(true);
-  //     };
-  //   }
-  // }, [context]);
-  // useEffect(() => {
-  //   if (loaded) {
-  //     // それに続く処理
-  //   }
-  // }, [loaded]);
+const Julia = (props: PropsWithChildren<{ juliaImage: [number[]] }>) => {
+  const [png, setPng] = useState<string | null>(null);
+  const showToast = useContext(ToastContext);
+  const juliaImage = props.juliaImage;
 
-  return <canvas id="canvas" className="julia"></canvas>;
+  useEffect(() => {
+    console.log("!!!!!!!!!!!!!!!!", juliaImage);
+    const canvasElem = document.createElement("canvas");
+    canvasElem.width = width;
+    canvasElem.height = height;
+    const ctx = canvasElem.getContext("2d");
+
+    // draw
+    if (ctx === null) {
+      openToast("canvas要素を取得できませんでした。");
+    } else if (!juliaImage?.length) {
+      openToast("エラーです。");
+    } else {
+      ctx.clearRect(0, 0, width, height);
+
+      for (let i = 0; i < height; i++) {
+        for (let j = 0; j < width; j++) {
+          ctx.fillStyle =
+            "rgb(" +
+            math.floor(
+              (255 * Math.log10(juliaImage[i]?.[j] ?? 0)) /
+                math.log10(threshold),
+            ) +
+            ",0,0)";
+          ctx.fillRect(i, j, 1, 1);
+        }
+      }
+
+      setPng(canvasElem.toDataURL());
+    }
+  }, []);
+
+  const openToast = (msg: string) => {
+    showToast && showToast(msg);
+  };
+
+  return (
+    <>
+      {png && (
+        <canvas
+          id="canvas"
+          width={width}
+          height={height}
+          className="julia"
+        ></canvas>
+      )}
+    </>
+  );
 };
 
 export default Julia;

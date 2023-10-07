@@ -1,4 +1,4 @@
-import type { Complex } from "mathjs";
+import { type Complex } from "mathjs";
 export type InputParamType = {
   min_x: number | string;
   max_x: number | string;
@@ -29,3 +29,5 @@ export type InputKeyName = "min_x" | "max_x" | "min_y" | "max_y" | "comp_const";
 //   [INPUT_NAME.max_y]: "虚数部最大値 max_y",
 //   [INPUT_NAME.comp_const]: "複素定数 comp_const",
 // };
+
+export type AssociativeArray = [number[]];

@@ -1,5 +1,6 @@
 const numPattern = /^[+,-]?([1-9]\d*|0)(\.\d+)?$/;
-const compPattern = /^[+,-]?(\d+(\.\d+))?[+,-](\d+(\.\d+))?[i]$/;
+const n = /[+-]?(\d+(\.\d+)?)+[ ]+[+-](\d+(\.\d+)?)[i]$/;
+const compPattern = /^([+,-])|(\d+(\.\d+)?)?[ ]+[+,-](\d+(\.\d+)?)?[i]$/;
 
 export const inputValidation = (val: string) => {
   if (!val || val.length === 0) {
@@ -18,7 +19,7 @@ export const complexValidation = (val: string) => {
     return "必須入力です。";
   }
 
-  if (compPattern.test(val)) {
+  if (n.test(val)) {
     return "";
   } else {
     return "〇＋△i の形で入力してください。";

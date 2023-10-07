@@ -1,5 +1,6 @@
 import express from "express";
 import * as math from "mathjs";
+import { width, height, threshold } from "../common/const";
 
 const app: express.Express = express();
 const port = 8888;
@@ -19,7 +20,7 @@ app.post("/julia", (req, res) => {
     const data = req.body;
     console.log(data);
 
-    const result = calCount(
+    const result = checkCalc(
       Number(data["min_x"]),
       Number(data["max_x"]),
       Number(data["min_y"]),
@@ -28,7 +29,9 @@ app.post("/julia", (req, res) => {
     );
 
     if (typeof result === "string") {
-      res.status(412).json({ error: result });
+      res.status(412).json({ errorMessage: result });
+    } else {
+      res.json({ img: result });
     }
 
     console.log(data);
@@ -37,37 +40,64 @@ app.post("/julia", (req, res) => {
   }
 });
 
-const h = 255;
-const w = 255;
-
 // 発散するか確認
-function calCount(
+const checkCalc = (
   min_x: number,
   max_x: number,
   min_y: number,
   max_y: number,
   comp_const: string,
-) {
+) => {
+  console.log(comp_const.split(" "));
+  const C = math.complex(comp_const);
+  const yy: number = math.abs(C);
+  console.log("C:", C, yy);
+  if (math.abs(C) > 2) {
+    return "複素定数が2より大きいため描画できません。";
+  }
+  const errorMessage = checkDiverge(min_x, max_x, min_y, max_y, comp_const);
+  if (errorMessage) {
+    return errorMessage;
+  }
+
+  const a: number[] = [...Array(width)].map((_, i) => 0);
+  const img = [];
+  for (let i = 0; i < height; i++) {
+    img[i] = a;
+  }
+
+  return img;
+};
+
+const checkDiverge = (
+  min_x: number,
+  max_x: number,
+  min_y: number,
+  max_y: number,
+  comp_const: string,
+): string | void => {
   const C = math.complex(comp_const);
 
-  calcLoop: for (let i = 0; i < w; i++) {
-    for (let j = 0; j < h; j++) {
+  for (let i = 0; i < width; i++) {
+    for (let j = 0; j < height; j++) {
       const Z = math.complex(
-        min_x + ((max_x - min_x) * i) / w,
-        min_y + ((max_y - min_y) * j) / h,
+        min_x + ((max_x - min_x) / width) * i,
+        min_y + ((max_y - min_y) / height) * j,
+        // min_x + ((max_x - min_x) * i) / width,
+        // min_y + ((max_y - min_y) * j) / height,
       );
+      // const Z = X[i] + j * Y[j];
       console.log("Z: ", Z);
 
-      for (let k = 0; k < 100; k++) {
-        const z = math.add(math.square(Z), C); // zを2乗してCを足す
-        console.log("z: ", z);
-        // 発散するかを確認
+      // 閾値を100として発散するかを確認
+      for (let k = 0; k < threshold; k++) {
+        const z = math.add(math.square(Z), C);
+        console.log("z: ", z, math.abs(z));
         if (math.larger(math.abs(z), 2)) {
-          break calcLoop;
+          // img[i][j] = k;
+          return "無限大に発散するため描画できません。";
         }
-        return {};
       }
     }
   }
-  return "描画できない入力でした。";
-}
+};
