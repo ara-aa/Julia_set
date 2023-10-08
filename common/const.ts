@@ -1,3 +1,3 @@
-export const width = 10;
-export const height = 10;
+export const width = 500;
+export const height = 500;
 export const threshold = 10;

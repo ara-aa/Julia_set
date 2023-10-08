@@ -31,7 +31,8 @@ app.post("/julia", (req, res) => {
     if (typeof result === "string") {
       res.status(412).json({ errorMessage: result });
     } else {
-      res.json({ img: result });
+      // res.json({ img: result });
+      res.json({ img: "ok" });
     }
 
     console.log(data);
@@ -48,25 +49,19 @@ const checkCalc = (
   max_y: number,
   comp_const: string,
 ) => {
-  console.log(comp_const.split(" "));
-  const C = math.complex(comp_const);
-  const yy: number = math.abs(C);
-  console.log("C:", C, yy);
-  if (math.abs(C) > 2) {
-    return "複素定数が2より大きいため描画できません。";
-  }
   const errorMessage = checkDiverge(min_x, max_x, min_y, max_y, comp_const);
   if (errorMessage) {
     return errorMessage;
   }
 
-  const a: number[] = [...Array(width)].map((_, i) => 0);
-  const img = [];
-  for (let i = 0; i < height; i++) {
-    img[i] = a;
-  }
+  // const a: number[] = [...Array(width)].map((_, i) => 0);
+  // const img = [];
+  // for (let i = 0; i < height; i++) {
+  //   img[i] = a;
+  // }
 
-  return img;
+  // return img;
+  return;
 };
 
 const checkDiverge = (
@@ -74,28 +69,42 @@ const checkDiverge = (
   max_x: number,
   min_y: number,
   max_y: number,
+  // C: math.Complex,
+  // comp_r: number,
+  // comp_i: number,
   comp_const: string,
 ): string | void => {
+  // const [comp_r, comp_i] = comp_const.replace("i", "").split(" ").map(Number);
+  // if (comp_r === undefined || comp_i === undefined) {
+  //   return "";
+  // }
+  // const C = math.complex(comp_r, comp_i);
   const C = math.complex(comp_const);
+  console.log(C);
+  if (math.larger(math.abs(C), 2)) {
+    return "複素定数が2より大きいため描画できません。";
+  }
 
+  console.log(C);
   for (let i = 0; i < width; i++) {
     for (let j = 0; j < height; j++) {
+      // const X = min_x + ((max_x - min_x) / width) * i;
+      // const Y = min_y + ((max_y - min_y) / height) * j;
       const Z = math.complex(
-        min_x + ((max_x - min_x) / width) * i,
-        min_y + ((max_y - min_y) / height) * j,
-        // min_x + ((max_x - min_x) * i) / width,
-        // min_y + ((max_y - min_y) * j) / height,
+        min_x + ((max_x - min_x) * i) / width,
+        min_y + ((max_y - min_y) * j) / height,
       );
-      // const Z = X[i] + j * Y[j];
-      console.log("Z: ", Z);
 
       // 閾値を100として発散するかを確認
       for (let k = 0; k < threshold; k++) {
+        // const x = X * X - Y * Y + comp_r;
+        // const y = 2.0 * X * Y + comp_i;
+        // console.log(x, y, math.abs(x * x + y * y));
         const z = math.add(math.square(Z), C);
-        console.log("z: ", z, math.abs(z));
+        console.log("z:", math.square(Z), z, math.abs(z));
         if (math.larger(math.abs(z), 2)) {
           // img[i][j] = k;
-          return "無限大に発散するため描画できません。";
+          // return "無限大に発散するため描画できません。";
         }
       }
     }

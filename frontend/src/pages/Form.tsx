@@ -20,7 +20,8 @@ const Form: React.FC = () => {
     max_y: "",
     comp_const: "",
   });
-  const juliaImage: [number[]] = [[]];
+  // const juliaImage: [number[]] = [[]];
+  const [showJulia, setShowJulia] = useState<boolean>(false);
   const showToast = useContext(ToastContext);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -77,11 +78,14 @@ const Form: React.FC = () => {
         return response.json();
       })
       .then((data) => {
+        console.log(data);
         if (data.errorMessage) {
           openToast(data.errorMessage);
         } else if (data.img) {
-          juliaImage[0] = data.img;
-          console.log(juliaImage);
+          // console.log(data.img);
+          // juliaImage[0] = data.img;
+          // console.log("juliaImage", juliaImage);
+          setShowJulia(() => true);
         } else {
           openToast("サーバーエラーです。");
         }
@@ -173,7 +177,15 @@ const Form: React.FC = () => {
           />
         </ul>
       </form>
-      <Julia juliaImage={juliaImage} />
+      {showJulia && (
+        <Julia
+          min_x={params.min_x}
+          max_x={params.max_x}
+          min_y={params.min_y}
+          max_y={params.max_y}
+          comp_const={params.comp_const}
+        />
+      )}
     </>
   );
 };
