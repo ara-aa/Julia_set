@@ -3,41 +3,33 @@ import Julia from "./Julia";
 import { InputParamType, ErrorMessageType } from "../../types/type";
 import { inputValidation, complexValidation } from "../utils/Validation";
 import { ToastContext } from "../components/ToastProvider";
+import { Loading } from "../components/Loading";
+import { initParams } from "../../../common/const";
 
 const Form: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
-  const [params, setParams] = useState<InputParamType>({
-    min_x: "",
-    max_x: "",
-    min_y: "",
-    max_y: "",
-    comp_const: "",
-  });
-  const [messages, setMessages] = useState<ErrorMessageType>({
-    min_x: "",
-    max_x: "",
-    min_y: "",
-    max_y: "",
-    comp_const: "",
-  });
-  // const juliaImage: [number[]] = [[]];
-  const [showJulia, setShowJulia] = useState<boolean>(false);
+  const [params, setParams] = useState<InputParamType>(initParams);
+  const [messages, setMessages] = useState<ErrorMessageType>(initParams);
+  const [juliaRows, setJuliaRows] = useState<number[][]>([]);
+  const [count, setCount] = useState<number>(0);
   const showToast = useContext(ToastContext);
+
+  const openToast = (msg: string) => {
+    showToast && showToast(msg);
+  };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const key = event.target.name;
     const value = event.target.value;
 
     setParams({ ...params, [key]: value });
-    setMessages({ ...messages, [key]: inputValidation(value) });
-  };
-
-  const handleCompChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const key = event.target.name;
-    const value = event.target.value;
-
-    setParams({ ...params, [key]: value });
-    setMessages({ ...messages, [key]: complexValidation(value) });
+    setMessages({
+      ...messages,
+      [key]:
+        key === "comp_const"
+          ? complexValidation(value)
+          : inputValidation(value),
+    });
   };
 
   const checkRequired = (): boolean => {
@@ -60,11 +52,11 @@ const Form: React.FC = () => {
     }
 
     setLoading(true);
-    await s();
+    await calcJulia();
     setLoading(false);
   };
 
-  const s = async () => {
+  const calcJulia = async () => {
     await fetch("/julia", {
       method: "POST",
       mode: "cors",
@@ -78,14 +70,11 @@ const Form: React.FC = () => {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
         if (data.errorMessage) {
           openToast(data.errorMessage);
-        } else if (data.img) {
-          // console.log(data.img);
-          // juliaImage[0] = data.img;
-          // console.log("juliaImage", juliaImage);
-          setShowJulia(() => true);
+        } else if (data.rows) {
+          setJuliaRows(() => data.rows);
+          setCount(() => count + 1);
         } else {
           openToast("サーバーエラーです。");
         }
@@ -96,12 +85,9 @@ const Form: React.FC = () => {
       });
   };
 
-  const openToast = (msg: string) => {
-    showToast && showToast(msg);
-  };
-
   return (
     <>
+      {loading && <Loading />}
       <form>
         <ul>
           <li>
@@ -160,8 +146,8 @@ const Form: React.FC = () => {
               }`}
               name="comp_const"
               value={params.comp_const as string}
-              onBlur={(e) => handleCompChange(e)}
-              onChange={(e) => handleCompChange(e)}
+              onBlur={(e) => handleChange(e)}
+              onChange={(e) => handleChange(e)}
               required
             />
             {messages.comp_const && (
@@ -177,15 +163,7 @@ const Form: React.FC = () => {
           />
         </ul>
       </form>
-      {showJulia && (
-        <Julia
-          min_x={params.min_x}
-          max_x={params.max_x}
-          min_y={params.min_y}
-          max_y={params.max_y}
-          comp_const={params.comp_const}
-        />
-      )}
+      {juliaRows.length > 0 && <Julia juliaRows={juliaRows} count={count} />}
     </>
   );
 };

@@ -3,7 +3,7 @@
     "target": "esnext",
     "module": "commonjs",
     "esModuleInterop": true,
-    "noUncheckedIndexedAccess": true,
+    // "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
