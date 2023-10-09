@@ -1,6 +1,6 @@
 # Julia_set
 
-[localhost](http://localhost:8080/satori/julia)
+[localhost](http://localhost:8080/julia)
 
 ## frontend
 

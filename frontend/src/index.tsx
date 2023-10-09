@@ -11,7 +11,7 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="/satori/julia" element={<App />} />
+        <Route path="/julia" element={<App />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>,
