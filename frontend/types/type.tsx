@@ -1,10 +1,9 @@
-import { type Complex } from "mathjs";
 export type InputParamType = {
   min_x: number | string;
   max_x: number | string;
   min_y: number | string;
   max_y: number | string;
-  comp_const: number | string | Complex;
+  comp_const: number | string;
 };
 
 export type ErrorMessageType = {

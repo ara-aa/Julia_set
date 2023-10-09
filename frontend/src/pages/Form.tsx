@@ -3,6 +3,7 @@ import Julia from "./Julia";
 import { InputParamType, ErrorMessageType } from "../../types/type";
 import { inputValidation, complexValidation } from "../utils/Validation";
 import { ToastContext } from "../components/ToastProvider";
+import { InputForm } from "../components/InputForm";
 import { Loading } from "../components/Loading";
 import { initParams } from "../../../common/const";
 
@@ -21,15 +22,11 @@ const Form: React.FC = () => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const key = event.target.name;
     const value = event.target.value;
+    const error =
+      key === "comp_const" ? complexValidation(value) : inputValidation(value);
 
     setParams({ ...params, [key]: value });
-    setMessages({
-      ...messages,
-      [key]:
-        key === "comp_const"
-          ? complexValidation(value)
-          : inputValidation(value),
-    });
+    setMessages({ ...messages, [key]: error });
   };
 
   const checkRequired = (): boolean => {
@@ -66,7 +63,6 @@ const Form: React.FC = () => {
       body: JSON.stringify(params),
     })
       .then((response) => {
-        setLoading(false);
         return response.json();
       })
       .then((data) => {
@@ -80,7 +76,6 @@ const Form: React.FC = () => {
         }
       })
       .catch((error) => {
-        setLoading(false);
         openToast("エラーが発生しました。");
       });
   };
@@ -91,68 +86,49 @@ const Form: React.FC = () => {
       <form>
         <ul>
           <li>
-            <label>実数部最小値 min_x</label>
-            <input
-              className={`form-text ${messages.min_x.length ? "--error" : ""}`}
-              name="min_x"
-              value={params.min_x}
-              onBlur={(e) => handleChange(e)}
-              onChange={(e) => handleChange(e)}
-              required
+            <InputForm
+              label="実数部最小値 min_x"
+              keyName="min_x"
+              val={params.min_x}
+              errorMessage={messages.min_x}
+              handleChange={handleChange}
             />
-            {messages.min_x && <p className="error-text">{messages.min_x}</p>}
           </li>
           <li>
-            <label>実数部最大値 max_x</label>
-            <input
-              className={`form-text ${messages.max_x.length ? "--error" : ""}`}
-              name="max_x"
-              value={params.max_x}
-              onBlur={(e) => handleChange(e)}
-              onChange={(e) => handleChange(e)}
-              required
+            <InputForm
+              label="実数部最大値 max_x"
+              keyName="max_x"
+              val={params.max_x}
+              errorMessage={messages.max_x}
+              handleChange={handleChange}
             />
-            {messages.max_x && <p className="error-text">{messages.max_x}</p>}
           </li>
           <li>
-            <label>虚数部最小値 min_y</label>
-            <input
-              className={`form-text ${messages.min_y.length ? "--error" : ""}`}
-              name="min_y"
-              value={params.min_y}
-              onBlur={(e) => handleChange(e)}
-              onChange={(e) => handleChange(e)}
-              required
+            <InputForm
+              label="虚数部最小値 min_y"
+              keyName="min_y"
+              val={params.min_y}
+              errorMessage={messages.min_y}
+              handleChange={handleChange}
             />
-            {messages.min_y && <p className="error-text">{messages.min_y}</p>}
           </li>
           <li>
-            <label>虚数部最大値 max_y</label>
-            <input
-              className={`form-text ${messages.max_y.length ? "--error" : ""}`}
-              name="max_y"
-              value={params.max_y}
-              onBlur={(e) => handleChange(e)}
-              onChange={(e) => handleChange(e)}
-              required
+            <InputForm
+              label="虚数部最大値 max_y"
+              keyName="max_y"
+              val={params.max_y}
+              errorMessage={messages.max_y}
+              handleChange={handleChange}
             />
-            {messages.max_y && <p className="error-text">{messages.max_y}</p>}
           </li>
           <li>
-            <label>複素定数 comp_const</label>
-            <input
-              className={`form-text ${
-                messages.comp_const.length ? "--error" : ""
-              }`}
-              name="comp_const"
-              value={params.comp_const as string}
-              onBlur={(e) => handleChange(e)}
-              onChange={(e) => handleChange(e)}
-              required
+            <InputForm
+              label="複素定数 comp_const"
+              keyName="comp_const"
+              val={params.comp_const}
+              errorMessage={messages.comp_const}
+              handleChange={handleChange}
             />
-            {messages.comp_const && (
-              <p className="error-text">{messages.comp_const}</p>
-            )}
           </li>
           <input
             type="submit"
