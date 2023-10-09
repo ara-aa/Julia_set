@@ -1,7 +1,5 @@
 export const width = 500;
 export const height = 300;
-// export const width = 300;
-// export const height = 100;
 export const threshold = 100;
 
 export const initParams = {

@@ -1,7 +1,5 @@
 import express from "express";
-import * as math from "mathjs";
-import { width, height, threshold } from "../common/const";
-import { cMaps } from "./color";
+import { checkDiverge } from "./utils/checkDiverge";
 
 const app: express.Express = express();
 const port = 8888;
@@ -19,6 +17,7 @@ app.use((req, res, next) => {
 app.post("/julia", (req, res) => {
   try {
     const data = req.body;
+    console.log(data);
 
     const result = checkDiverge(
       Number(data["min_x"]),
@@ -34,55 +33,9 @@ app.post("/julia", (req, res) => {
       res.json({ rows: result });
     }
   } catch (error) {
+    console.log(error);
     res.status(500).json({
       errorMessage: "エラーが発生しました。やり直してください。",
     });
   }
 });
-
-const checkDiverge = (
-  min_x: number,
-  max_x: number,
-  min_y: number,
-  max_y: number,
-  comp_const: string,
-): string | string[][] => {
-  const C = math.complex(comp_const);
-  if (math.larger(math.abs(C), 2)) {
-    return "複素定数が2より大きいため描画できません。";
-  }
-  const rows = getRows();
-  const n = Math.log10(threshold);
-
-  for (let i = 0; i < width; i++) {
-    for (let j = 0; j < height; j++) {
-      const Z = math.complex(
-        min_x + ((max_x - min_x) * i) / width,
-        min_y + ((max_y - min_y) * j) / height,
-      );
-
-      for (let k = 1; k <= threshold; k++) {
-        const z = math.add(math.square(Z), C);
-        if (math.larger(math.abs(z), 2)) {
-          const v: number = Math.floor(
-            (255 * Math.log10(k)) / n,
-          ) as unknown as number;
-          rows[i][j] = cMaps[v];
-          break;
-        }
-      }
-    }
-  }
-  return rows;
-};
-
-const getRows = (): string[][] => {
-  const rows: string[][] = [];
-  for (let i = 0; i < width; i++) {
-    rows[i] = [];
-    for (let j = 0; j < height; j++) {
-      rows[i][j] = "#000";
-    }
-  }
-  return rows;
-};
