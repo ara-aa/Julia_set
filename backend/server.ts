@@ -17,8 +17,6 @@ app.use((req, res, next) => {
 app.post("/julia", (req, res) => {
   try {
     const data = req.body;
-    console.log(data);
-
     const result = checkDiverge(
       Number(data["min_x"]),
       Number(data["max_x"]),
@@ -33,7 +31,6 @@ app.post("/julia", (req, res) => {
       res.json({ rows: result });
     }
   } catch (error) {
-    console.log(error);
     res.status(500).json({
       errorMessage: "エラーが発生しました。やり直してください。",
     });

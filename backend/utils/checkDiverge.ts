@@ -27,14 +27,13 @@ export const checkDiverge = (
 
       for (let k = 1; k <= threshold; k++) {
         const z = math.add(math.square(Z), C);
+
         if (math.larger(math.abs(z), 2)) {
           const v: number = Math.floor(
             (255 * Math.log10(k)) / n,
           ) as unknown as number;
 
           rows[i][j] = cMaps[v];
-          // rows[i][j] = k;
-          // console.debug("rows:", v, rows[i][j], k);
           break;
         }
       }

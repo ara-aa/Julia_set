@@ -81,7 +81,7 @@ const Form: React.FC = () => {
       })
       .catch((error) => {
         setLoading(false);
-        openToast(error);
+        openToast("エラーが発生しました。");
       });
   };
 
