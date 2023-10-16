@@ -1,5 +1,5 @@
 const numPattern = /^[+,-]?([1-9]\d*|0)(\.\d+)?$/;
-const compPattern = /[+-]?(\d+(\.\d+)?)+[+-](\d+(\.\d+)?)[i]$/;
+const compPattern = /[+-]?(\d+(\.\d+)?)+[ ]+[+-](\d+(\.\d+)?)[i]$/;
 
 export const inputValidation = (val: string) => {
   if (!val || val.length === 0) {
@@ -21,6 +21,6 @@ export const complexValidation = (val: string) => {
   if (compPattern.test(val)) {
     return "";
   } else {
-    return "実数虚数i の形で入力してください。";
+    return "実数(半角スペース)虚数i の形で入力してください。";
   }
 };

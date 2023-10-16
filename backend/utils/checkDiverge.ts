@@ -9,33 +9,34 @@ export const checkDiverge = (
   max_y: number,
   comp_const: string,
 ): string | string[][] => {
-  const C = math.complex(comp_const);
+  const [comp_a, comp_b] = comp_const.replace("i", "").split(" ").map(Number);
 
-  if (math.larger(math.abs(C), 2)) {
+  if (!comp_a || !comp_b) {
+    return "複素定数のエラーです。";
+  }
+
+  if (math.larger(math.abs(comp_a + -comp_b), 2)) {
     return "複素定数が2より大きいため描画できません。";
   }
 
   const rows = getRows();
-  const n = Math.log10(threshold);
 
   for (let i = 0; i < width; i++) {
     for (let j = 0; j < height; j++) {
-      const Z = math.complex(
-        min_x + ((max_x - min_x) * i) / width,
-        min_y + ((max_y - min_y) * j) / height,
-      );
+      let x = min_x + (i * (max_x - min_x)) / width;
+      let y = min_y + (j * (max_y - min_y)) / height;
 
       for (let k = 1; k <= threshold; k++) {
-        const z = math.add(math.square(Z), C);
+        let xx = Math.pow(x, 2) - Math.pow(y, 2) + comp_a;
+        let yy = 2 * x * y + comp_b;
 
-        if (math.larger(math.abs(z), 2)) {
-          const v: number = Math.floor(
-            (255 * Math.log10(k)) / n,
-          ) as unknown as number;
-
-          rows[i][j] = cMaps[v];
+        if (Math.pow(xx, 2) + Math.pow(yy, 2) > 4.0) {
+          rows[i][j] = cMaps[k];
           break;
         }
+
+        x = xx;
+        y = yy;
       }
     }
   }
