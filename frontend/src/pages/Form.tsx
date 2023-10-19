@@ -1,18 +1,18 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Julia from "./Julia";
 import { InputParamType, ErrorMessageType } from "../../types/type";
 import { inputValidation, complexValidation } from "../utils/Validation";
 import { ToastContext } from "../components/ToastProvider";
 import { InputForm } from "../components/InputForm";
 import { Loading } from "../components/Loading";
-import { initParams } from "../../../common/const";
+import { initParams, width, height } from "../../../common/const";
 
-const Form: React.FC = () => {
+export default function Form(): JSX.Element {
   const [loading, setLoading] = useState<boolean>(false);
   const [params, setParams] = useState<InputParamType>(initParams);
   const [messages, setMessages] = useState<ErrorMessageType>(initParams);
   const [juliaRows, setJuliaRows] = useState<number[][]>([]);
-  const [count, setCount] = useState<number>(0);
+  const [png, setPng] = useState<string | null>(null);
   const showToast = useContext(ToastContext);
 
   const openToast = (msg: string) => {
@@ -66,19 +66,35 @@ const Form: React.FC = () => {
         return response.json();
       })
       .then((data) => {
-        if (data.errorMessage) {
-          openToast(data.errorMessage);
-        } else if (data.rows) {
+        if (data.rows) {
           setJuliaRows(() => data.rows);
-          setCount(() => count + 1);
         } else {
-          openToast("サーバーエラーです。");
+          openToast(
+            data.errorMessage ? data.errorMessage : "サーバーエラーです。",
+          );
         }
       })
       .catch((error) => {
         openToast("エラーが発生しました。");
       });
   };
+
+  useEffect(() => {
+    const canvasElem = document.createElement("canvas");
+    canvasElem.width = width;
+    canvasElem.height = height;
+    const ctx = canvasElem.getContext("2d");
+    if (!ctx) return;
+
+    juliaRows.forEach((h, i) => {
+      h.forEach((w, j) => {
+        ctx.fillStyle = `${w}`;
+        ctx.fillRect(i, j, 1, 1);
+      });
+    });
+
+    setPng(canvasElem.toDataURL());
+  }, [juliaRows]);
 
   return (
     <>
@@ -139,9 +155,7 @@ const Form: React.FC = () => {
           />
         </ul>
       </form>
-      {juliaRows.length > 0 && <Julia juliaRows={juliaRows} count={count} />}
+      {png && <Julia png={png} />}
     </>
   );
-};
-
-export default Form;
+}
