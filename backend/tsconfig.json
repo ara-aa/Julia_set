@@ -12,9 +12,6 @@
     "strict": true,
     "skipLibCheck": true,
     "outDir": "dist",
-    "jsx": "react",
-    "paths": {
-      "@types/*": ["../@types/*"]
-    }
+    "jsx": "react"
   }
 }
