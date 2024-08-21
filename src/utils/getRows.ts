@@ -1,4 +1,4 @@
-import { width, height } from '@/constants'
+import { height, width } from '@/constants'
 
 export const getRows = (): string[][] => {
   const rows: string[][] = []

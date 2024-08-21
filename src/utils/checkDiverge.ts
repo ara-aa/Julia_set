@@ -1,5 +1,5 @@
+import { cMaps, height, threshold, width } from '@/constants'
 import * as math from 'mathjs'
-import { cMaps, width, height, threshold } from '@/constants'
 import { getRows } from './getRows'
 export const checkDiverge = (
   min_x: number,

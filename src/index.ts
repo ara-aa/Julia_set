@@ -1,5 +1,5 @@
-import express from 'express'
 import { checkDiverge } from '@/utils'
+import express from 'express'
 
 const app: express.Express = express()
 const port = 8888
