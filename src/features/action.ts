@@ -34,7 +34,9 @@ export const action = () => {
       body: JSON.stringify(data),
     })
       .then(response => {
-        console.log(response)
+        if (!response.ok) {
+          throw new Error('エラーが発生しました')
+        }
         return response.json()
       })
       .then(data => {

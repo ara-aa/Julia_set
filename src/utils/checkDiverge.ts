@@ -6,17 +6,12 @@ export const checkDiverge = (
   max_x: number,
   min_y: number,
   max_y: number,
-  comp_const: string,
+  comp_a: number,
+  comp_b: number,
 ): string | string[][] => {
-  const [comp_a, comp_b] = comp_const.replace('i', '').split(' ').map(Number)
-
-  // if (!comp_a || !comp_b) {
-  //   return '複素定数のエラーです。'
+  // if (math.larger(math.abs(comp_a + -comp_b), 2)) {
+  //   return '複素定数が2より大きいため描画できません。'
   // }
-
-  if (math.larger(math.abs(comp_a + -comp_b), 2)) {
-    return '複素定数が2より大きいため描画できません。'
-  }
 
   const rows = getRows()
 
