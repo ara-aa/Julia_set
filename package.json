@@ -12,7 +12,8 @@
     "check": "biome check ./src",
     "lint:fix": "biome lint --apply ./src",
     "format:fix": "biome format ./src --write",
-    "check:fix": "biome check --apply ./src"
+    "check:fix": "biome check --apply ./src",
+    "start": "bun --hot src/index.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
@@ -27,6 +28,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.52.2",
+    "react-resizable-panels": "^2.1.1",
     "sonner": "^1.5.0",
     "tailwind-merge": "^2.5.2",
     "tailwindcss-animate": "^1.0.7",
@@ -35,6 +37,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.8.3",
+    "@types/bun": "^1.1.6",
     "@types/react": "^18.3.4",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",

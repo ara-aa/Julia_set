@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { type SubmitHandler, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { HEIGHT, WIDTH } from './julia.constants'
-import { type SchemaType, schema } from './juliaSet.validation'
+import { type SchemaType, defaultValues, schema } from './juliaSet.validation'
 
 export const action = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -12,6 +12,7 @@ export const action = () => {
 
   const juliaForm = useForm<SchemaType>({
     resolver: yupResolver(schema),
+    defaultValues: defaultValues,
   })
 
   const onSubmit: SubmitHandler<SchemaType> = async data => {
@@ -21,23 +22,27 @@ export const action = () => {
   }
 
   const calcJulia = async (data: SchemaType) => {
-    await fetch('/julia', {
+    await fetch('http://localhost:8888/calc', {
       method: 'POST',
       mode: 'cors',
       headers: {
         'Content-Type': 'application/json',
+        // 'Access-Control-Allow-Origin': 'http://localhost:8888',
+        // 'Access-Control-Allow-Methods': 'ORIGIN, POST',
+        // 'Access-Control-Allow-Headers': 'Authorization, Content-Type',
       },
       body: JSON.stringify(data),
     })
       .then(response => {
+        console.log(response)
         return response.json()
       })
       .then(data => {
-        if (data.rows) {
-          setJuliaRows(() => data.rows)
-        } else {
+        if (!data.rows) {
           toast(data.errorMessage ? data.errorMessage : 'サーバーエラーです。')
+          return
         }
+        setJuliaRows(() => data.rows)
       })
       .catch(_ => {
         toast('エラーが発生しました。')
