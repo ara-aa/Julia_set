@@ -12,7 +12,7 @@ export const action = () => {
 
   const juliaForm = useForm<SchemaType>({
     resolver: yupResolver(schema),
-    defaultValues: defaultValues,
+    defaultValues: defaultValues
   })
 
   const onSubmit: SubmitHandler<SchemaType> = async data => {
@@ -26,12 +26,12 @@ export const action = () => {
       method: 'POST',
       mode: 'cors',
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
         // 'Access-Control-Allow-Origin': 'http://localhost:8888',
         // 'Access-Control-Allow-Methods': 'ORIGIN, POST',
         // 'Access-Control-Allow-Headers': 'Authorization, Content-Type',
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(data)
     })
       .then(response => {
         if (!response.ok) {

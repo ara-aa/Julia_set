@@ -8,8 +8,8 @@ const CORS_HEADERS = {
     'Access-Control-Allow-Origin': 'http://localhost:5173',
     'Access-Control-Allow-Methods': 'ORIGIN, POST',
     'Access-Control-Allow-Headers': 'Content-Type, Accept',
-    'Access-Control-Request-Headers': 'Content-Type, Accept',
-  },
+    'Access-Control-Request-Headers': 'Content-Type, Accept'
+  }
 }
 
 Bun.serve({
@@ -18,7 +18,7 @@ Bun.serve({
     if (req.method === 'OPTIONS') {
       return new Response('Success', {
         ...CORS_HEADERS,
-        ...{ status: 204 },
+        ...{ status: 204 }
       })
     }
 
@@ -32,7 +32,7 @@ Bun.serve({
     }
 
     return new Response('404 Error', { ...CORS_HEADERS, ...{ status: 500 } })
-  },
+  }
 })
 
 async function handlePostRequest(request: Request) {
@@ -46,12 +46,12 @@ async function handlePostRequest(request: Request) {
       Number(values.min_y),
       Number(values.max_y),
       Number(values.comp_const_a),
-      Number(values.comp_const_b),
+      Number(values.comp_const_b)
     )
 
     return new Response(JSON.stringify({ rows: result }), {
       ...CORS_HEADERS,
-      ...{ status: 200 },
+      ...{ status: 200 }
     })
   } catch (_) {
     return new Response('500 Error', { ...CORS_HEADERS, ...{ status: 500 } })

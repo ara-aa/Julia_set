@@ -7,7 +7,7 @@ export const checkDiverge = (
   min_y: number,
   max_y: number,
   comp_a: number,
-  comp_b: number,
+  comp_b: number
 ): string | string[][] => {
   // if (math.larger(math.abs(comp_a + -comp_b), 2)) {
   //   return '複素定数が2より大きいため描画できません。'

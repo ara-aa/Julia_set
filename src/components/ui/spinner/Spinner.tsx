@@ -7,12 +7,12 @@ const spinnerVariants = cva('flex-col items-center justify-center', {
   variants: {
     show: {
       true: 'absolute inset-0 flex items-center justify-center bg-gray-700 bg-opacity-25',
-      false: 'hidden',
-    },
+      false: 'hidden'
+    }
   },
   defaultVariants: {
-    show: true,
-  },
+    show: true
+  }
 })
 
 const loaderVariants = cva('animate-spin text-primary', {
@@ -20,12 +20,12 @@ const loaderVariants = cva('animate-spin text-primary', {
     size: {
       small: 'size-6',
       medium: 'size-8',
-      large: 'size-12',
-    },
+      large: 'size-12'
+    }
   },
   defaultVariants: {
-    size: 'medium',
-  },
+    size: 'medium'
+  }
 })
 
 interface SpinnerContentProps
@@ -39,7 +39,7 @@ export const Spinner = ({
   size,
   show,
   children,
-  className,
+  className
 }: SpinnerContentProps) => {
   return (
     <span className={spinnerVariants({ show })}>

@@ -7,5 +7,5 @@ export const initParams = {
   max_x: '',
   min_y: '',
   max_y: '',
-  comp_const: '',
+  comp_const: ''
 }

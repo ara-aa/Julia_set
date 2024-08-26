@@ -38,13 +38,13 @@ export const schema = yup.object().shape({
         if (
           math.larger(
             math.abs(Number(comp_a) + -Number(this.parent.comp_const_b)),
-            2,
+            2
           )
         ) {
           return false
         }
         return true
-      },
+      }
     ),
   comp_const_b: yup
     .string()
@@ -58,14 +58,14 @@ export const schema = yup.object().shape({
         if (
           math.larger(
             math.abs(Number(this.parent.comp_const_a) + -Number(comp_b)),
-            2,
+            2
           )
         ) {
           return false
         }
         return true
-      },
-    ),
+      }
+    )
 })
 
 export type SchemaType = yup.InferType<typeof schema>
@@ -76,5 +76,5 @@ export const defaultValues = {
   min_y: '',
   max_y: '',
   comp_const_a: '',
-  comp_const_b: '',
+  comp_const_b: ''
 }

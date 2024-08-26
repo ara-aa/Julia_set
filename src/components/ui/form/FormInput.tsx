@@ -5,13 +5,14 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
+  FormMessage
 } from './form'
 import { Input } from './input'
 
 import type { UseFormReturn } from 'react-hook-form'
 
 type Props = {
+  // biome-ignore lint: <explanation>
   form: UseFormReturn<any>
   name: string
   label: string

@@ -10,9 +10,9 @@
     "lint": "biome lint ./src",
     "format": "biome format ./src",
     "check": "biome check ./src",
-    "lint:fix": "biome lint --apply ./src",
+    "lint:fix": "biome lint --write ./src",
     "format:fix": "biome format ./src --write",
-    "check:fix": "biome check --apply ./src",
+    "check:fix": "biome check --write ./src",
     "start": "bun --hot src/index.ts"
   },
   "dependencies": {

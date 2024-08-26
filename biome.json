@@ -18,7 +18,7 @@
     "formatter": {
       "quoteStyle": "single",
       "jsxQuoteStyle": "single",
-      "trailingComma": "all",
+      "trailingCommas": "none",
       "semicolons": "asNeeded",
       "arrowParentheses": "asNeeded"
     }

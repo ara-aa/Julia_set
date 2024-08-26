@@ -2,7 +2,7 @@ import { Button, Form, FormInput, Label, Layout, Spinner } from '@/components'
 import {
   ResizableHandle,
   ResizablePanel,
-  ResizablePanelGroup,
+  ResizablePanelGroup
 } from '@/components/ui/resizable'
 import { action } from './action'
 import { COMP_CONST, MAX_X, MAX_Y, MIN_X, MIN_Y } from './julia.constants'
