@@ -4,7 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite & bun --hot src/index.ts",
+    "dev:all": "vite & bun --hot src/index.ts & npx tailwindcss -i ./src/styles/index.css -o ./src/styles/output.css --watch",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "lint": "biome lint ./src",
@@ -38,6 +39,7 @@
   "devDependencies": {
     "@biomejs/biome": "1.8.3",
     "@types/bun": "^1.1.6",
+    "@types/mathjs": "^9.4.2",
     "@types/react": "^18.3.4",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",

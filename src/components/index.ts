@@ -1,4 +1,4 @@
-export { Layout } from './Layout/Layout'
+export { Layout } from './ui/layout/Layout'
 export { Button } from './ui/button'
 
 /** form */

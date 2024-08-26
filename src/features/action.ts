@@ -1,9 +1,9 @@
+import { HEIGHT, WIDTH } from '@/constants'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useEffect, useState } from 'react'
 import { type SubmitHandler, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
-import { HEIGHT, WIDTH } from './julia.constants'
-import { type SchemaType, defaultValues, schema } from './juliaSet.validation'
+import { type SchemaType, defaultValues, schema } from './validation'
 
 export const action = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -22,14 +22,11 @@ export const action = () => {
   }
 
   const calcJulia = async (data: SchemaType) => {
-    await fetch('http://localhost:8888/calc', {
+    await fetch(`${import.meta.env.VITE_API_URL}/calc`, {
       method: 'POST',
       mode: 'cors',
       headers: {
         'Content-Type': 'application/json'
-        // 'Access-Control-Allow-Origin': 'http://localhost:8888',
-        // 'Access-Control-Allow-Methods': 'ORIGIN, POST',
-        // 'Access-Control-Allow-Headers': 'Authorization, Content-Type',
       },
       body: JSON.stringify(data)
     })

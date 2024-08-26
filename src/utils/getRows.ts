@@ -1,10 +1,10 @@
-import { height, width } from '@/constants'
+import { HEIGHT, WIDTH } from '@/constants'
 
 export const getRows = (): string[][] => {
   const rows: string[][] = []
-  for (let i = 0; i < width; i++) {
+  for (let i = 0; i < WIDTH; i++) {
     rows[i] = []
-    for (let j = 0; j < height; j++) {
+    for (let j = 0; j < HEIGHT; j++) {
       rows[i][j] = '#000'
     }
   }

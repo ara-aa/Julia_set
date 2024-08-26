@@ -1,6 +1,6 @@
+import { COMP_CONST, MAX_X, MAX_Y, MIN_X, MIN_Y } from '@/constants'
 import * as math from 'mathjs'
 import * as yup from 'yup'
-import { COMP_CONST, MAX_X, MAX_Y, MIN_X, MIN_Y } from './julia.constants'
 
 const REQUIRED = '必須入力項目です。'
 const NUM_REGEX = /^-?(\d|\d+|\d+\.\d+)?$/
@@ -37,7 +37,7 @@ export const schema = yup.object().shape({
       function (comp_a) {
         if (
           math.larger(
-            math.abs(Number(comp_a) + -Number(this.parent.comp_const_b)),
+            math.add(Number(comp_a), Number(this.parent.comp_const_b)),
             2
           )
         ) {
@@ -57,7 +57,7 @@ export const schema = yup.object().shape({
       function (comp_b) {
         if (
           math.larger(
-            math.abs(Number(this.parent.comp_const_a) + -Number(comp_b)),
+            math.add(Number(this.parent.comp_const_a), Number(comp_b)),
             2
           )
         ) {

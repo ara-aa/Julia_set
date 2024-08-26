@@ -1,37 +1,37 @@
-import { checkDiverge } from '@/utils'
+import { calcJuliaSet } from '@/utils'
 import Bun from 'bun'
 
-const PORT = 8888
-const CORS_HEADERS = {
-  headers: {
-    'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': 'http://localhost:5173',
-    'Access-Control-Allow-Methods': 'ORIGIN, POST',
-    'Access-Control-Allow-Headers': 'Content-Type, Accept',
-    'Access-Control-Request-Headers': 'Content-Type, Accept'
+const setHeader = (statusCode: number) => {
+  return {
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': 'http://localhost:5173',
+      'Access-Control-Allow-Methods': 'ORIGIN, POST',
+      'Access-Control-Allow-Headers': 'Content-Type, Accept',
+      'Access-Control-Request-Headers': 'Content-Type, Accept'
+    },
+    ...{ status: statusCode }
   }
 }
 
 Bun.serve({
-  port: PORT,
+  port: Bun.env.API_PORT,
   async fetch(req: Request) {
     if (req.method === 'OPTIONS') {
-      return new Response('Success', {
-        ...CORS_HEADERS,
-        ...{ status: 204 }
-      })
+      return new Response('Success', setHeader(204))
     }
 
     const { pathname } = new URL(req.url)
+
     if (pathname !== '/calc' && req.method !== 'POST') {
-      return new Response('500 Error', { ...CORS_HEADERS, ...{ status: 500 } })
+      return new Response('500 Error', setHeader(500))
     }
 
     if (req.body) {
       return handlePostRequest(req)
     }
 
-    return new Response('404 Error', { ...CORS_HEADERS, ...{ status: 500 } })
+    return new Response('404 Error', setHeader(500))
   }
 })
 
@@ -40,7 +40,7 @@ async function handlePostRequest(request: Request) {
     const bodyStr = await request.text()
     const values = JSON.parse(bodyStr)
 
-    const result = checkDiverge(
+    const result = calcJuliaSet(
       Number(values.min_x),
       Number(values.max_x),
       Number(values.min_y),
@@ -49,11 +49,8 @@ async function handlePostRequest(request: Request) {
       Number(values.comp_const_b)
     )
 
-    return new Response(JSON.stringify({ rows: result }), {
-      ...CORS_HEADERS,
-      ...{ status: 200 }
-    })
+    return new Response(JSON.stringify({ rows: result }), setHeader(200))
   } catch (_) {
-    return new Response('500 Error', { ...CORS_HEADERS, ...{ status: 500 } })
+    return new Response('500 Error', setHeader(500))
   }
 }

@@ -4,8 +4,8 @@ import {
   ResizablePanel,
   ResizablePanelGroup
 } from '@/components/ui/resizable'
+import { COMP_CONST, MAX_X, MAX_Y, MIN_X, MIN_Y } from '@/constants'
 import { action } from './action'
-import { COMP_CONST, MAX_X, MAX_Y, MIN_X, MIN_Y } from './julia.constants'
 
 const Page = () => {
   const { juliaForm, onSubmit, isLoading, png } = action()

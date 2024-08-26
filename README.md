@@ -1,19 +1,12 @@
 # Julia_set
 
-[localhost](http://localhost:8080/julia)
-
-## frontend
-
+[url](http://localhost:5174)
 ```
-$ cd frontend
-$ npm start
+bun run dev:all
 ```
-
-## backend
-
+or
 ```
-$ cd backend
-$ npm start
+bun run dev
 ```
 
 ## ジュリア集合

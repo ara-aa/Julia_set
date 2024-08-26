@@ -1,2 +1,11 @@
 export { cMaps } from './color'
-export { width, height, threshold, initParams } from './const'
+export {
+  COMP_CONST,
+  MAX_X,
+  MAX_Y,
+  MIN_X,
+  MIN_Y,
+  WIDTH,
+  HEIGHT,
+  THRESHOLD
+} from './const'
