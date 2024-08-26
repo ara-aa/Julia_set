@@ -6,7 +6,7 @@ import type React from 'react'
 const spinnerVariants = cva('flex-col items-center justify-center', {
   variants: {
     show: {
-      true: 'flex',
+      true: 'absolute inset-0 flex items-center justify-center bg-gray-700 bg-opacity-25',
       false: 'hidden',
     },
   },

@@ -50,16 +50,13 @@ const Page = () => {
         <ResizableHandle />
 
         {png && (
-          <>
-            <ResizablePanel>
-              <div className='julia'>
-                {png && <img alt='julia_set' src={png} />}
-              </div>
-            </ResizablePanel>
-          </>
+          <ResizablePanel className='flex justify-center'>
+            {png && <img alt='ジュリア集合の描画結果画像' src={png} />}
+          </ResizablePanel>
         )}
+
+        {isLoading && <Spinner size='large' />}
       </ResizablePanelGroup>
-      {isLoading && <Spinner size='large' />}
     </Layout>
   )
 }
