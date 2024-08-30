@@ -32,6 +32,9 @@ export const FormInput = (props: Props) => {
           <FormControl>
             <Input
               {...field}
+              {...form.register(name, {
+                setValueAs: v => (v === '' ? '' : Number.parseFloat(v))
+              })}
               className={clsx(errors[name] && 'border-red-500')}
             />
           </FormControl>

@@ -6,26 +6,10 @@ const REQUIRED = '必須入力項目です。'
 const NUM_REGEX = /^-?(\d|\d+|\d+\.\d+)?$/
 
 export const schema = yup.object().shape({
-  min_x: yup
-    .string()
-    .label(MIN_X)
-    .required(REQUIRED)
-    .matches(NUM_REGEX, '数値を入力してください'),
-  max_x: yup
-    .string()
-    .label(MAX_X)
-    .required(REQUIRED)
-    .matches(NUM_REGEX, '数値を入力してください'),
-  min_y: yup
-    .string()
-    .label(MIN_Y)
-    .required(REQUIRED)
-    .matches(NUM_REGEX, '数値を入力してください'),
-  max_y: yup
-    .string()
-    .label(MAX_Y)
-    .required(REQUIRED)
-    .matches(NUM_REGEX, '数値を入力してください'),
+  min_x: yup.number().label(MIN_X).required(REQUIRED),
+  max_x: yup.number().label(MAX_X).required(REQUIRED),
+  min_y: yup.number().label(MIN_Y).required(REQUIRED),
+  max_y: yup.number().label(MAX_Y).required(REQUIRED),
   comp_const_a: yup
     .string()
     .label(`${COMP_CONST}_a`)
